@@ -26,7 +26,7 @@ class IpAddressController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $ipAddresses = IpAddress::query();
 
@@ -45,7 +45,7 @@ class IpAddressController extends Controller
      * @param StoreIpAddressRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreIpAddressRequest $request)
+    public function store(StoreIpAddressRequest $request): JsonResponse
     {
         $ipAddress = $this->ipAddressService->storeIpAddress($request->validated());
 
@@ -97,7 +97,7 @@ class IpAddressController extends Controller
      * @param IpAddress $ipAddress
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(IpAddress $ipAddress)
+    public function destroy(IpAddress $ipAddress): JsonResponse
     {
         $this->ipAddressService->deleteIpAddress($ipAddress);
 
