@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('ip_addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('address');
+            $table->string('ip_address');
             $table->string('label');
             $table->text('comment')->nullable();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
