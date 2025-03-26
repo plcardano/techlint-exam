@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\v1\AuditLog;
 
+use App\Http\Resources\v1\IpAddress\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,11 +27,7 @@ class AuditLogResource extends JsonResource
             'user_agent' => $this->user_agent,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user' => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'email' => $this->user->email,
-            ],
+            'user' => UserResource::make($this->user),
         ];
     }
 }
