@@ -18,7 +18,7 @@ class IpAddress extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'address',
+        'ip_address',
         'label',
         'comment',
         'user_id',
@@ -27,9 +27,9 @@ class IpAddress extends Model
     /**
      * Get the user that created this IP address.
      */
-    public function user(): BelongsTo
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
