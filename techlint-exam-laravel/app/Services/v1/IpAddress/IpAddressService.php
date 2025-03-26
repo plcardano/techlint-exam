@@ -3,10 +3,18 @@
 namespace App\Services\v1\IpAddress;
 
 use App\Models\IpAddress;
+use App\Services\v1\AuditLog\AuditLogService;
 use Illuminate\Support\Facades\Auth;
 
 class IpAddressService
 {
+    protected $auditLogService;
+
+    public function __construct(AuditLogService $auditLogService)
+    {
+        $this->auditLogService = $auditLogService;
+    }
+
     /**
      * Store a new IP address
      *
@@ -16,7 +24,11 @@ class IpAddressService
     public function storeIpAddress(array $data): IpAddress
     {
         $data['user_id'] = Auth::id();
-        return IpAddress::create($data);
+
+        $ipAddress = IpAddress::create($data);
+        $this->auditLogService->logModel('create', $ipAddress, null, $ipAddress->toArray());
+
+        return $ipAddress;
     }
 
     /**
@@ -28,7 +40,12 @@ class IpAddressService
      */
     public function updateIpAddress(IpAddress $ipAddress, array $data): IpAddress
     {
+        $oldValues = $ipAddress->toArray();
+
         $ipAddress->update($data);
+
+        $this->auditLogService->logModel('update', $ipAddress, $oldValues, $ipAddress->toArray());
+
         return $ipAddress;
     }
 
@@ -40,6 +57,10 @@ class IpAddressService
      */
     public function deleteIpAddress(IpAddress $ipAddress): bool
     {
+        $oldValues = $ipAddress->toArray();
+
+        $this->auditLogService->logModel('delete', $ipAddress, $oldValues, null);
+
         return $ipAddress->delete();
     }
 

@@ -3,10 +3,18 @@
 namespace App\Services\v1\Auth;
 
 use App\Models\User;
+use App\Services\v1\AuditLog\AuditLogService;
 use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
+    protected $auditLogService;
+
+    public function __construct(AuditLogService $auditLogService)
+    {
+        $this->auditLogService = $auditLogService;
+    }
+
     /**
      * Attempt to authenticate a user.
      *
@@ -21,6 +29,8 @@ class AuthService
         if (!$token = Auth::guard('api')->attempt($credentials)) {
             return null;
         }
+
+        $this->auditLogService->logLogin();
 
         return $this->respondWithToken($token);
     }
@@ -42,6 +52,8 @@ class AuthService
      */
     public function logout(): bool
     {
+        $this->auditLogService->logLogout();
+
         Auth::guard('api')->logout();
         return true;
     }
