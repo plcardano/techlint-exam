@@ -2,6 +2,7 @@
 
 namespace App\Services\v1\Auth;
 
+use App\Http\Resources\v1\IpAddress\UserResource;
 use App\Models\User;
 use App\Services\v1\AuditLog\AuditLogService;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,7 @@ class AuthService
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::guard('api')->factory()->getTTL() * 60,
-            'user' => Auth::guard('api')->user(),
+            'user' => UserResource::make(Auth::guard('api')->user()),
         ];
     }
 }
